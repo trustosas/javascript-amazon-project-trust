@@ -104,5 +104,3 @@ document.querySelectorAll('.delete-quantity-link').forEach((deleteLink) => {
 });
 
 document.querySelector('.return-to-home-link').innerHTML = `${updateCartQuantity()} Items`;
-
-console.log(updateCartQuantity());
