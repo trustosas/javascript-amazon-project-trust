@@ -67,3 +67,19 @@ export function calculateCartQuantity() {
   
   return cartQuantity;
 }
+
+export function updateQuantity(id, value) {
+  
+  cart.forEach((cartItem) => {
+    if (cartItem.productId === id) {
+      cartItem.quantity = value
+    }
+  });
+  
+  const quantityElement = document.querySelector('.quantity-label')
+  if (quantityElement) {
+    quantityElement.innerText = value
+  }
+  
+  saveToLocalStorage();
+}

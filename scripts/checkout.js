@@ -1,7 +1,7 @@
 import {cart, removeFromCart} from '../data/cart.js';
 import {products} from '../data/products.js';
 import {formatCurrency} from './utils/money.js';
-import {calculateCartQuantity} from '../data/cart.js';
+import {calculateCartQuantity, updateQuantity} from '../data/cart.js';
 
 let generatedCheckoutOrderSummary = '';
 
@@ -38,6 +38,10 @@ cart.forEach((cartItem) => {
           </span>
           <span class="update-quantity-link js-update-quantity-link link-primary" data-product-id="${matchingProduct.id}">
             Update
+          </span>
+          <input class="quantity-input" data-product-id="${matchingProduct.id}">
+          <span class="save-quantity-link link-primary" data-product-id="${matchingProduct.id}">
+            Save
           </span>
           <span class="delete-quantity-link js-delete-quantity-link link-primary" data-product-id="${matchingProduct.id}">
             Delete
@@ -107,8 +111,39 @@ document.querySelectorAll('.js-delete-quantity-link').forEach((deleteLink) => {
 document.querySelectorAll('.js-update-quantity-link').forEach((updateLink) => {
   updateLink.addEventListener('click', () => {
     const id = updateLink.dataset.productId;
-    console.log(id);
+    const cartItem = document.querySelector(`.cart-item-container-${id}`);
+    cartItem.classList.add('is-editing-quantity');
     calculateCartQuantity();
+  });
+});
+
+document.querySelectorAll('.save-quantity-link').forEach((saveLink) => {
+  saveLink.addEventListener('click', () => {
+    const id = saveLink.dataset.productId;
+    const cartItem = document.querySelector(`.cart-item-container-${id}`);
+    cartItem.classList.remove('is-editing-quantity');
+    const input = Number(document.querySelector('.quantity-input').value);
+    if (input > 0 && input < 1000) {
+      updateQuantity(id, input);
+    }
+    calculateCartQuantity();
+  });
+});
+
+document.querySelectorAll('.quantity-input').forEach((field) => {
+  field.addEventListener('keydown', (event) => {
+    
+    const id = field.dataset.productId;
+    
+    const input = Number(document.querySelector('.quantity-input').value);
+    
+    if (event.key==='Enter') {
+      if (input > 0 && input < 1000) {
+        updateQuantity(id, input);
+        calculateCartQuantity();
+      }
+    }
+    
   });
 });
 
