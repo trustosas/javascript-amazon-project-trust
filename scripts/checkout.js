@@ -28,7 +28,8 @@ cart.forEach((cartItem) => {
   });
   
   const today = dayjs();
-  const deliveryDay = today.add(deliveryOption.deliveryDays, 'days');
+  console.log(deliveryOptions.deliveryDays);
+  const deliveryDay = today.add(deliveryOptions.deliveryDays, 'days');
   const dateString = deliveryDay.format('dddd, MMMM D');
   
   generatedCheckoutOrderSummary += 
@@ -165,7 +166,7 @@ document.querySelectorAll('.js-delivery-option').forEach((option) => {
     const productId = option.dataset.productId;
     const deliveryOptionId = option.dataset.deliveryOptionId;
     
-    updateDeliveryOption(productId, deliveryOptionId);
+    updateDeliveryOption(productId, deliveryOptionId)
     
   });
 });
