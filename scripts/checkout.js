@@ -1,4 +1,4 @@
-import {cart, removeFromCart} from '../data/cart.js';
+import {cart, removeFromCart, updateDeliveryOption} from '../data/cart.js';
 import {products} from '../data/products.js';
 import {formatCurrency} from './utils/money.js';
 import {calculateCartQuantity, updateQuantity} from '../data/cart.js'
@@ -92,7 +92,7 @@ function deliveryOptionsHTML(matchingProduct, cartItem) {
     const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
     
     html += `
-    <div class="delivery-option js-delivery-option">
+    <div class="delivery-option js-delivery-option" data-product-id="${matchingProduct.id}" data-delivery-option-id="${deliveryOption}">
       <input type="radio"
         ${isChecked ? 'checked' : ''}
         class="delivery-option-input"
@@ -112,7 +112,6 @@ function deliveryOptionsHTML(matchingProduct, cartItem) {
   
   return html;
 }
-  
 
 document.querySelector('.order-summary').innerHTML = generatedCheckoutOrderSummary;
 
@@ -126,10 +125,8 @@ document.querySelectorAll('.js-delete-quantity-link').forEach((deleteLink) => {
 
 document.querySelectorAll('.js-update-quantity-link').forEach((updateLink) => {
   updateLink.addEventListener('click', () => {
-    const id = updateLink.dataset.productId;
-    const cartItem = document.querySelector(`.cart-item-container-${id}`);
-    cartItem.classList.add('is-editing-quantity');
-    calculateCartQuantity();
+    const productId = updateLink.dataset.productId;
+    
   });
 });
 
@@ -159,6 +156,16 @@ document.querySelectorAll('.quantity-input').forEach((field) => {
         calculateCartQuantity();
       }
     }
+    
+  });
+});
+
+document.querySelectorAll('.js-delivery-option').forEach((option) => {
+  option.addEventListener('click', () => {
+    const productId = option.dataset.productId;
+    const deliveryOptionId = option.dataset.deliveryOptionId;
+    
+    updateDeliveryOption(productId, deliveryOptionId);
     
   });
 });
