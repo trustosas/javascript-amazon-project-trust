@@ -2,9 +2,9 @@ import {cart, removeFromCart} from '../data/cart.js';
 import {products} from '../data/products.js';
 import {formatCurrency} from './utils/money.js';
 import {calculateCartQuantity, updateQuantity} from '../data/cart.js'
-// import {dayjs} from 'https://cdn.jsdelivr.net/npm/dayjs@1.11.13/esm/index.js';
+import dayjs from 'https://unpkg.com/dayjs@1.11.13/esm/index.js';
 
-// console.log(dayjs());
+console.log(dayjs());
 
 let generatedCheckoutOrderSummary = '';
 
