@@ -17,7 +17,7 @@ cart.forEach((cartItem) => {
     }
   });
   
-  const deliveryOptionId = cartItem.deliveryOptionId
+  const deliveryOptionId = cartItem.deliveryOptionId;
   
   let deliveryOption;
   
@@ -28,8 +28,7 @@ cart.forEach((cartItem) => {
   });
   
   const today = dayjs();
-  console.log(deliveryOptions.deliveryDays);
-  const deliveryDay = today.add(deliveryOptions.deliveryDays, 'days');
+  const deliveryDay = today.add(deliveryOption.deliveryDays, 'days');
   const dateString = deliveryDay.format('dddd, MMMM D');
   
   generatedCheckoutOrderSummary += 
@@ -93,7 +92,7 @@ function deliveryOptionsHTML(matchingProduct, cartItem) {
     const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
     
     html += `
-    <div class="delivery-option js-delivery-option" data-product-id="${matchingProduct.id}" data-delivery-option-id="${deliveryOption}">
+    <div class="delivery-option js-delivery-option" data-product-id="${matchingProduct.id}" data-delivery-option-id="1">
       <input type="radio"
         ${isChecked ? 'checked' : ''}
         class="delivery-option-input"
@@ -166,8 +165,7 @@ document.querySelectorAll('.js-delivery-option').forEach((option) => {
     const productId = option.dataset.productId;
     const deliveryOptionId = option.dataset.deliveryOptionId;
     
-    updateDeliveryOption(productId, deliveryOptionId)
-    
+    updateDeliveryOption(productId, deliveryOptionId);
   });
 });
 
