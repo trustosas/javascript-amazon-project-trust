@@ -1,9 +1,10 @@
 import { cart, removeFromCart, updateDeliveryOption } from '../../data/cart.js';
-import { products } from '../../data/products.js';
-import { formatCurrency } from '../utils/money.js';
+import { products, getProduct } from '../../data/products.js';
+import formatCurrency from '../utils/money.js';
 import { calculateCartQuantity, updateQuantity } from '../../data/cart.js'
 import dayjs from 'https://unpkg.com/dayjs@1.11.13/esm/index.js';
-import { deliveryOptions } from '../../data/deliveryOptions.js';
+import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOptions.js';
+import {renderPaymentSummary} from '././paymentSummary.js';
 
 export function renderOrderSummary() {
   
@@ -11,23 +12,11 @@ export function renderOrderSummary() {
   
   cart.forEach((cartItem) => {
     
-    let matchingProduct;
-    
-    products.forEach((product) => {
-      if (product.id === cartItem.productId) {
-        matchingProduct = product;
-      }
-    });
+    const matchingProduct = getProduct(cartItem.productId);
     
     const deliveryOptionId = cartItem.deliveryOptionId;
     
-    let deliveryOption;
-    
-    deliveryOptions.forEach((option) => {
-      if (option.id === deliveryOptionId) {
-        deliveryOption = option;
-      }
-    });
+    const deliveryOption = getDeliveryOption(deliveryOptionId);
     
     const today = dayjs();
     const deliveryDay = today.add(deliveryOption.deliveryDays, 'days');
@@ -122,6 +111,7 @@ export function renderOrderSummary() {
       const id = deleteLink.dataset.productId;
       removeFromCart(id);
       calculateCartQuantity();
+      renderPaymentSummary();
     });
   });
   
@@ -144,6 +134,7 @@ export function renderOrderSummary() {
         updateQuantity(id, input);
       }
       calculateCartQuantity();
+      renderPaymentSummary();
     });
   });
   
@@ -161,6 +152,7 @@ export function renderOrderSummary() {
         }
       }
       
+      renderPaymentSummary();
     });
   });
   
@@ -171,9 +163,9 @@ export function renderOrderSummary() {
       
       updateDeliveryOption(productId, deliveryOptionId);
       renderOrderSummary();
+      renderPaymentSummary();
     });
   });
   
   calculateCartQuantity();
-  
 };
