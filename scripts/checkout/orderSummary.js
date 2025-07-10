@@ -20,7 +20,14 @@ export function renderOrderSummary() {
     const deliveryOption = getDeliveryOption(deliveryOptionId);
     
     const today = dayjs();
-    const deliveryDay = today.add(deliveryOption.deliveryDays, 'days');
+    let deliveryDay = today.add(deliveryOption.deliveryDays, 'days');
+    
+    if (deliveryDay.day() === 0) {
+      deliveryDay = deliveryDay.add(1, 'days');
+    } else if (deliveryDay.day() === 6) {
+      deliveryDay = deliveryDay.add(2, 'days');
+    }
+    
     const dateString = deliveryDay.format('dddd, MMMM D');
     
     generatedCheckoutOrderSummary +=
@@ -76,7 +83,14 @@ export function renderOrderSummary() {
     
     deliveryOptions.forEach((deliveryOption) => {
       const today = dayjs();
-      const deliveryDay = today.add(deliveryOption.deliveryDays, 'days');
+      let deliveryDay = today.add(deliveryOption.deliveryDays, 'days');
+      
+      if (deliveryDay.day() === 0) {
+      deliveryDay = deliveryDay.add(1, 'days');
+      } else if (deliveryDay.day() === 6) {
+      deliveryDay = deliveryDay.add(2, 'days');
+      }
+      
       const dateString = deliveryDay.format('dddd, MMMM D');
       
       const priceString = deliveryOption.priceCents === 0 ? "FREE" : `$${formatCurrency(deliveryOption.priceCents)} -`;
