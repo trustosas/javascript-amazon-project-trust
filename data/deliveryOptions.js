@@ -31,17 +31,19 @@ export function getDeliveryOption(deliveryOptionId) {
 export function calculateDeliveryDate(deliveryOption) {
   
   const today = dayjs();
+  let deliveryDay = today;
   
-  let deliveryDay = today.add(deliveryOption.deliveryDays, 'days');
-  
-  if (deliveryDay.day() === 0) {
-    deliveryDay = deliveryDay.add(1, 'days');
-  } else if (deliveryDay.day() === 6) {
-    deliveryDay = deliveryDay.add(2, 'days');
+  for (let i = 1; i <= deliveryOption.deliveryDays; i++) {
+    if (deliveryDay.add(1, 'days').day() === 6) {
+      deliveryDay = deliveryDay.add(3, 'days');
+    } else if (deliveryDay.add(1, 'days').day() === 0) {
+      deliveryDay = deliveryDay.add(2, 'days');
+    } else {
+      deliveryDay = deliveryDay.add(1, 'days');
+    }
   }
   
   const dateString = deliveryDay.format('dddd, MMMM D');
   
-  return dateString
-
+  return dateString;
 }
