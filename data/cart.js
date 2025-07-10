@@ -1,3 +1,5 @@
+import {renderOrderSummary} from '../scripts/checkout/orderSummary.js';
+
 export let cart = JSON.parse(localStorage.getItem('cart')) || [
   {
     productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
@@ -46,7 +48,7 @@ export function removeFromCart(productId) {
   
   cart = newCart;
   
-  document.querySelector(`.cart-item-container-${productId}`).remove();
+  renderOrderSummary();
   
   saveToLocalStorage();
 };
@@ -61,11 +63,6 @@ export function calculateCartQuantity() {
   const cartQuantityElement = document.querySelector('.js-cart-quantity');
   if (cartQuantityElement) {
     cartQuantityElement.innerText = cartQuantity;
-  }
-  
-  const cartQuantityLink = document.querySelector('.js-return-to-home-link')
-  if (cartQuantityLink) {
-    cartQuantityLink.innerHTML = `${cartQuantity} Items`;
   }
   
   return cartQuantity;

@@ -4,7 +4,8 @@ import formatCurrency from '../utils/money.js';
 import { calculateCartQuantity, updateQuantity } from '../../data/cart.js'
 import dayjs from 'https://unpkg.com/dayjs@1.11.13/esm/index.js';
 import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOptions.js';
-import {renderPaymentSummary} from '././paymentSummary.js';
+import {renderPaymentSummary} from './paymentSummary.js';
+import {renderCheckoutHeader} from './checkoutHeader.js';
 
 export function renderOrderSummary() {
   
@@ -112,6 +113,7 @@ export function renderOrderSummary() {
       removeFromCart(id);
       calculateCartQuantity();
       renderPaymentSummary();
+      renderCheckoutHeader();
     });
   });
   
@@ -135,6 +137,7 @@ export function renderOrderSummary() {
       }
       calculateCartQuantity();
       renderPaymentSummary();
+      renderCheckoutHeader();
     });
   });
   
@@ -153,6 +156,7 @@ export function renderOrderSummary() {
       }
       
       renderPaymentSummary();
+      renderCheckoutHeader();
     });
   });
   
@@ -164,8 +168,10 @@ export function renderOrderSummary() {
       updateDeliveryOption(productId, deliveryOptionId);
       renderOrderSummary();
       renderPaymentSummary();
+
     });
   });
   
   calculateCartQuantity();
+  renderPaymentSummary();
 };
