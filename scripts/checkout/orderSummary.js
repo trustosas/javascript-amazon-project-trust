@@ -2,8 +2,7 @@ import { cart, removeFromCart, updateDeliveryOption } from '../../data/cart.js';
 import { products, getProduct } from '../../data/products.js';
 import formatCurrency from '../utils/money.js';
 import { calculateCartQuantity, updateQuantity } from '../../data/cart.js'
-import dayjs from 'https://unpkg.com/dayjs@1.11.13/esm/index.js';
-import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOptions.js';
+import { deliveryOptions, getDeliveryOption, calculateDeliveryDate } from '../../data/deliveryOptions.js';
 import {renderPaymentSummary} from './paymentSummary.js';
 import {renderCheckoutHeader} from './checkoutHeader.js';
 
@@ -19,16 +18,7 @@ export function renderOrderSummary() {
     
     const deliveryOption = getDeliveryOption(deliveryOptionId);
     
-    const today = dayjs();
-    let deliveryDay = today.add(deliveryOption.deliveryDays, 'days');
-    
-    if (deliveryDay.day() === 0) {
-      deliveryDay = deliveryDay.add(1, 'days');
-    } else if (deliveryDay.day() === 6) {
-      deliveryDay = deliveryDay.add(2, 'days');
-    }
-    
-    const dateString = deliveryDay.format('dddd, MMMM D');
+    const dateString = calculateDeliveryDate(deliveryOption);
     
     generatedCheckoutOrderSummary +=
       `
@@ -82,16 +72,8 @@ export function renderOrderSummary() {
     let html = '';
     
     deliveryOptions.forEach((deliveryOption) => {
-      const today = dayjs();
-      let deliveryDay = today.add(deliveryOption.deliveryDays, 'days');
       
-      if (deliveryDay.day() === 0) {
-      deliveryDay = deliveryDay.add(1, 'days');
-      } else if (deliveryDay.day() === 6) {
-      deliveryDay = deliveryDay.add(2, 'days');
-      }
-      
-      const dateString = deliveryDay.format('dddd, MMMM D');
+      const dateString = calculateDeliveryDate(deliveryOption);
       
       const priceString = deliveryOption.priceCents === 0 ? "FREE" : `$${formatCurrency(deliveryOption.priceCents)} -`;
       
@@ -160,11 +142,14 @@ export function renderOrderSummary() {
       
       const id = field.dataset.productId;
       
+      const cartItem = document.querySelector(`.cart-item-container-${id}`);
+      
       const input = Number(document.querySelector('.quantity-input').value);
       
       if (event.key === 'Enter') {
         if (input > 0 && input < 1000) {
           updateQuantity(id, input);
+          cartItem.classList.remove('is-editing-quantity');
           calculateCartQuantity();
         }
       }
