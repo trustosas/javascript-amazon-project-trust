@@ -101,7 +101,7 @@ export function renderOrderSummary() {
     return html;
   }
   
-  document.querySelector('.order-summary').innerHTML = generatedCheckoutOrderSummary;
+  document.querySelector('.js-order-summary').innerHTML = generatedCheckoutOrderSummary;
   
   document.querySelectorAll('.js-delete-quantity-link').forEach((deleteLink) => {
     deleteLink.addEventListener('click', () => {
