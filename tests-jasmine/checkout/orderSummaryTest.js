@@ -17,5 +17,6 @@ describe('test suite: renderOrderSummary', () => {
     });
     
     renderOrderSummary();
+    document.querySelector('.js-test-container').innerHTML="";
   });
 });
